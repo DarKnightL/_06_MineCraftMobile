@@ -22,6 +22,10 @@ public class ChunkGenerate : MonoBehaviour
 
         AddCubeFront();
         AddCubeBack();
+        AddCubeRight();
+        AddCubeLeft();
+        AddCubeTop();
+        AddCubeBottom();
 
 
         mesh.vertices = vertices.ToArray();
@@ -31,6 +35,7 @@ public class ChunkGenerate : MonoBehaviour
         mesh.RecalculateNormals();
 
         GetComponent<MeshFilter>().mesh = mesh;
+      
     }
 
 
@@ -54,7 +59,27 @@ public class ChunkGenerate : MonoBehaviour
 
 
 
-    void AddCubeBack() {
+    void AddCubeBack()
+    {
+
+        triangulars.Add(1 + vertices.Count);
+        triangulars.Add(2 + vertices.Count);
+        triangulars.Add(3 + vertices.Count);
+
+        triangulars.Add(3 + vertices.Count);
+        triangulars.Add(0 + vertices.Count);
+        triangulars.Add(1 + vertices.Count);
+
+
+        vertices.Add(new Vector3(-1, 0, 0));
+        vertices.Add(new Vector3(-1, 0, 1));
+        vertices.Add(new Vector3(-1, 1, 1));
+        vertices.Add(new Vector3(-1, 1, 0));
+    }
+
+
+    void AddCubeRight()
+    {
 
         triangulars.Add(0 + vertices.Count);
         triangulars.Add(3 + vertices.Count);
@@ -65,9 +90,63 @@ public class ChunkGenerate : MonoBehaviour
         triangulars.Add(0 + vertices.Count);
 
 
-        vertices.Add(new Vector3(-1, 0, 0));
+        vertices.Add(new Vector3(0, 0, 1));
         vertices.Add(new Vector3(-1, 0, 1));
         vertices.Add(new Vector3(-1, 1, 1));
+        vertices.Add(new Vector3(0, 1, 1));
+    }
+
+
+    void AddCubeLeft()
+    {
+        triangulars.Add(1 + vertices.Count);
+        triangulars.Add(2 + vertices.Count);
+        triangulars.Add(3 + vertices.Count);
+
+        triangulars.Add(3 + vertices.Count);
+        triangulars.Add(0 + vertices.Count);
+        triangulars.Add(1 + vertices.Count);
+
+
+        vertices.Add(new Vector3(0, 0, 0));
+        vertices.Add(new Vector3(-1, 0, 0));
         vertices.Add(new Vector3(-1, 1, 0));
+        vertices.Add(new Vector3(0, 1, 0));
+    }
+
+
+    void AddCubeTop()
+    {
+        triangulars.Add(1 + vertices.Count);
+        triangulars.Add(0 + vertices.Count);
+        triangulars.Add(3 + vertices.Count);
+
+        triangulars.Add(3 + vertices.Count);
+        triangulars.Add(2 + vertices.Count);
+        triangulars.Add(1 + vertices.Count);
+
+
+        vertices.Add(new Vector3(0, 1, 0));
+        vertices.Add(new Vector3(0, 1, 1));
+        vertices.Add(new Vector3(-1, 1, 1));
+        vertices.Add(new Vector3(-1, 1, 0));
+    }
+
+
+    void AddCubeBottom()
+    {
+        triangulars.Add(2 + vertices.Count);
+        triangulars.Add(3 + vertices.Count);
+        triangulars.Add(0 + vertices.Count);
+
+        triangulars.Add(0 + vertices.Count);
+        triangulars.Add(1 + vertices.Count);
+        triangulars.Add(2 + vertices.Count);
+
+
+        vertices.Add(new Vector3(0, 0, 0));
+        vertices.Add(new Vector3(0, 0, 1));
+        vertices.Add(new Vector3(-1, 0, 1));
+        vertices.Add(new Vector3(-1, 0, 0));
     }
 }
