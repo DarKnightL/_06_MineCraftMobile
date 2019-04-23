@@ -11,6 +11,7 @@ public class ChunkGenerate : MonoBehaviour
 {
     List<Vector3> vertices = new List<Vector3>();
     List<int> triangulars = new List<int>();
+    List<Vector2> uvs = new List<Vector2>();
 
     Mesh mesh;
 
@@ -20,6 +21,8 @@ public class ChunkGenerate : MonoBehaviour
     int height = 10;
     [SerializeField]
     int width = 20;
+    [SerializeField]
+    float textureOffset = 1 / 16f;
 
     private void Start()
     {
@@ -108,7 +111,7 @@ public class ChunkGenerate : MonoBehaviour
 
     void AddCubeFront(int x, int y, int z)
     {
-
+        
 
         triangulars.Add(0 + vertices.Count);
         triangulars.Add(3 + vertices.Count);
@@ -122,6 +125,11 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(0 + x, 0 + y, 1 + z));
         vertices.Add(new Vector3(0 + x, 1 + y, 1 + z));
         vertices.Add(new Vector3(0 + x, 1 + y, 0 + z));
+
+        uvs.Add(new Vector2(0, 0));
+        uvs.Add(new Vector2(textureOffset, 0));
+        uvs.Add(new Vector2(textureOffset, textureOffset));
+        uvs.Add(new Vector2(0, textureOffset));
     }
 
 
@@ -222,6 +230,10 @@ public class ChunkGenerate : MonoBehaviour
     public bool isBlockTransparant(int x, int y, int z)
     {
         if (x >= width || y >= height || z >= width || x < 0 || y < 0 || z < 0)
+        {
+            return true;
+        }
+        if (map[x,y,z]==0)
         {
             return true;
         }
