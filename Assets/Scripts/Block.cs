@@ -9,10 +9,12 @@ public class Block
 
     public int textureX, textureY, textureX_Top, textureY_Top, textureX_Bottom, textureY_Bottom;
 
+
     public Block()
     {
         name = null;
     }
+
 
     public Block(string name, int tx, int ty,int txt,int tyt,int txb, int tyb) {
         this.name = name;

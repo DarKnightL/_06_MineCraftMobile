@@ -15,7 +15,7 @@ public class ChunkGenerate : MonoBehaviour
 
     Mesh mesh;
 
-    public int[,,] map;
+    public Block[,,] map;
 
     [SerializeField]
     int height = 10;
@@ -35,7 +35,7 @@ public class ChunkGenerate : MonoBehaviour
 
     void CalculateMap()
     {
-        map = new int[width, height, width];
+        map = new Block[width, height, width];
 
         for (int x = 0; x < width; x++)
         {
@@ -43,7 +43,7 @@ public class ChunkGenerate : MonoBehaviour
             {
                 for (int z = 0; z < width; z++)
                 {
-                    map[x, y, z] = 1;
+                   // map[x, y, z] = 1;
                 }
             }
         }
@@ -63,36 +63,37 @@ public class ChunkGenerate : MonoBehaviour
             {
                 for (int z = 0; z < width; z++)
                 {
-                    if (map[x, y, z] != 0)
+                    if (map[x, y, z] != null)
                     {
                         if (isBlockTransparant(x+1, y, z))
                         {
-                            AddCubeFront(x, y, z);
+                            AddCubeFront(x, y, z,map[x,y,z]);
                         }
 
                         if (isBlockTransparant(x-1, y, z))
                         {
-                            AddCubeBack(x, y, z);
+                            AddCubeBack(x, y, z, map[x, y, z]);
                         }
 
                         if (isBlockTransparant(x, y, z+1))
                         {
-                            AddCubeRight(x, y, z);
+                            AddCubeRight(x, y, z, map[x, y, z]);
                         }
 
                         if (isBlockTransparant(x, y, z-1))
                         {
-                            AddCubeLeft(x, y, z);
+                            AddCubeLeft(x, y, z, map[x, y, z]);
                         }
 
                         if (isBlockTransparant(x, y+1, z))
                         {
-                            AddCubeTop(x, y, z);
+                            AddCubeTop(x, y, z, map[x, y, z]);
                         }
 
                         if (isBlockTransparant(x, y-1, z))
                         {
-                            AddCubeBottom(x, y, z);
+                           
+                            AddCubeBottom(x, y, z,map[x,y,z]);
                         }
                     }
                 }
@@ -101,6 +102,8 @@ public class ChunkGenerate : MonoBehaviour
 
         mesh.vertices = vertices.ToArray();
         mesh.triangles = triangulars.ToArray();
+        mesh.uv = uvs.ToArray();
+
 
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
@@ -109,7 +112,7 @@ public class ChunkGenerate : MonoBehaviour
     }
 
 
-    void AddCubeFront(int x, int y, int z)
+    void AddCubeFront(int x, int y, int z,Block b)
     {
         
 
@@ -126,15 +129,17 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(0 + x, 1 + y, 1 + z));
         vertices.Add(new Vector3(0 + x, 1 + y, 0 + z));
 
-        uvs.Add(new Vector2(0, 0));
-        uvs.Add(new Vector2(textureOffset, 0));
-        uvs.Add(new Vector2(textureOffset, textureOffset));
-        uvs.Add(new Vector2(0, textureOffset));
+        uvs.Add(new Vector2(b.textureX*textureOffset, b.textureY*textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset)+textureOffset, b.textureY * textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, (b.textureY * textureOffset)+textureOffset));
+        uvs.Add(new Vector2(b.textureX * textureOffset, (b.textureY * textureOffset) + textureOffset));
+
+
     }
 
 
 
-    void AddCubeBack(int x, int y, int z)
+    void AddCubeBack(int x, int y, int z, Block b)
     {
 
         triangulars.Add(1 + vertices.Count);
@@ -150,10 +155,15 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(-1 + x, 0 + y, 1 + z));
         vertices.Add(new Vector3(-1 + x, 1 + y, 1 + z));
         vertices.Add(new Vector3(-1 + x, 1 + y, 0 + z));
+
+        uvs.Add(new Vector2(b.textureX * textureOffset, b.textureY * textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, b.textureY * textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, (b.textureY * textureOffset) + textureOffset));
+        uvs.Add(new Vector2(b.textureX * textureOffset, (b.textureY * textureOffset) + textureOffset));
     }
 
 
-    void AddCubeRight(int x, int y, int z)
+    void AddCubeRight(int x, int y, int z, Block b)
     {
 
         triangulars.Add(0 + vertices.Count);
@@ -169,10 +179,15 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(-1 + x, 0 + y, 1 + z));
         vertices.Add(new Vector3(-1 + x, 1 + y, 1 + z));
         vertices.Add(new Vector3(0 + x, 1 + y, 1 + z));
+
+        uvs.Add(new Vector2(b.textureX * textureOffset, b.textureY * textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, b.textureY * textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, (b.textureY * textureOffset) + textureOffset));
+        uvs.Add(new Vector2(b.textureX * textureOffset, (b.textureY * textureOffset) + textureOffset));
     }
 
 
-    void AddCubeLeft(int x, int y, int z)
+    void AddCubeLeft(int x, int y, int z, Block b)
     {
         triangulars.Add(1 + vertices.Count);
         triangulars.Add(2 + vertices.Count);
@@ -187,10 +202,15 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(-1 + x, 0 + y, 0 + z));
         vertices.Add(new Vector3(-1 + x, 1 + y, 0 + z));
         vertices.Add(new Vector3(0 + x, 1 + y, 0 + z));
+
+        uvs.Add(new Vector2(b.textureX * textureOffset, b.textureY * textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, b.textureY * textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, (b.textureY * textureOffset) + textureOffset));
+        uvs.Add(new Vector2(b.textureX * textureOffset, (b.textureY * textureOffset) + textureOffset));
     }
 
 
-    void AddCubeTop(int x, int y, int z)
+    void AddCubeTop(int x, int y, int z, Block b)
     {
         triangulars.Add(1 + vertices.Count);
         triangulars.Add(0 + vertices.Count);
@@ -205,10 +225,15 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(0 + x, 1 + y, 1 + z));
         vertices.Add(new Vector3(-1 + x, 1 + y, 1 + z));
         vertices.Add(new Vector3(-1 + x, 1 + y, 0 + z));
+
+        uvs.Add(new Vector2(b.textureX * textureOffset, b.textureY * textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, b.textureY * textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, (b.textureY * textureOffset) + textureOffset));
+        uvs.Add(new Vector2(b.textureX * textureOffset, (b.textureY * textureOffset) + textureOffset));
     }
 
 
-    void AddCubeBottom(int x, int y, int z)
+    void AddCubeBottom(int x, int y, int z, Block b)
     {
         triangulars.Add(2 + vertices.Count);
         triangulars.Add(3 + vertices.Count);
@@ -223,6 +248,11 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(0 + x, 0 + y, 1 + z));
         vertices.Add(new Vector3(-1 + x, 0 + y, 1 + z));
         vertices.Add(new Vector3(-1 + x, 0 + y, 0 + z));
+
+        uvs.Add(new Vector2(b.textureX * textureOffset, b.textureY * textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, b.textureY * textureOffset));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, (b.textureY * textureOffset) + textureOffset));
+        uvs.Add(new Vector2(b.textureX * textureOffset, (b.textureY * textureOffset) + textureOffset));
     }
 
 
@@ -233,7 +263,7 @@ public class ChunkGenerate : MonoBehaviour
         {
             return true;
         }
-        if (map[x,y,z]==0)
+        if (map[x,y,z]==null)
         {
             return true;
         }
