@@ -117,6 +117,7 @@ public class ChunkGenerate : MonoBehaviour
         mesh.RecalculateNormals();
 
         GetComponent<MeshFilter>().mesh = mesh;
+        this.gameObject.AddComponent<BoxCollider>();
     }
 
 
