@@ -13,6 +13,8 @@ public class ChunkGenerate : MonoBehaviour
     List<int> triangulars = new List<int>();
     List<Vector2> uvs = new List<Vector2>();
 
+   
+
     Mesh mesh;
 
     public Block[,,] map;
@@ -20,7 +22,7 @@ public class ChunkGenerate : MonoBehaviour
     [SerializeField]
     int height = 10;
     [SerializeField]
-    int width = 20;
+    public static int width = 20;
     [SerializeField]
     float textureOffset = 1 / 16f;
 
@@ -43,11 +45,11 @@ public class ChunkGenerate : MonoBehaviour
             {
                 for (int z = 0; z < width; z++)
                 {
-                    if (y==height-1)
+                    if (y==height-1&&Random.Range(0,5)==1)
                     {
                         map[x, y, z] = BlockList.GetBlock("grass");
                     }
-                    else
+                    else if(y<height-1)
                     {
                         map[x, y, z] = BlockList.GetBlock("dirt");
                     }
