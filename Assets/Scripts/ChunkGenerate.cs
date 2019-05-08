@@ -25,6 +25,8 @@ public class ChunkGenerate : MonoBehaviour
     public static int width = 20;
     [SerializeField]
     float textureOffset = 1 / 16f;
+    [SerializeField]
+    float shrinkSize = 0.005f;
 
     private void Start()
     {
@@ -140,10 +142,10 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(0 + x, 1 + y, 1 + z));
         vertices.Add(new Vector3(0 + x, 1 + y, 0 + z));
 
-        uvs.Add(new Vector2(b.textureX * textureOffset, b.textureY * textureOffset));
-        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, b.textureY * textureOffset));
-        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, (b.textureY * textureOffset) + textureOffset));
-        uvs.Add(new Vector2(b.textureX * textureOffset, (b.textureY * textureOffset) + textureOffset));
+        uvs.Add(new Vector2(b.textureX * textureOffset, b.textureY * textureOffset)+new Vector2(shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, b.textureY * textureOffset) + new Vector2(-shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, (b.textureY * textureOffset) + textureOffset)+new Vector2(-shrinkSize, -shrinkSize));
+        uvs.Add(new Vector2(b.textureX * textureOffset, (b.textureY * textureOffset) + textureOffset)+new Vector2(shrinkSize,-shrinkSize));
 
 
     }
@@ -167,10 +169,10 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(-1 + x, 1 + y, 1 + z));
         vertices.Add(new Vector3(-1 + x, 1 + y, 0 + z));
 
-        uvs.Add(new Vector2(b.textureX * textureOffset, b.textureY * textureOffset));
-        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, b.textureY * textureOffset));
-        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, (b.textureY * textureOffset) + textureOffset));
-        uvs.Add(new Vector2(b.textureX * textureOffset, (b.textureY * textureOffset) + textureOffset));
+        uvs.Add(new Vector2(b.textureX * textureOffset, b.textureY * textureOffset) + new Vector2(shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, b.textureY * textureOffset) + new Vector2(-shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX * textureOffset) + textureOffset, (b.textureY * textureOffset) + textureOffset) + new Vector2(-shrinkSize, -shrinkSize));
+        uvs.Add(new Vector2(b.textureX * textureOffset, (b.textureY * textureOffset) + textureOffset)+ new Vector2(shrinkSize, -shrinkSize));
     }
 
 
@@ -191,10 +193,10 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(-1 + x, 1 + y, 1 + z));
         vertices.Add(new Vector3(0 + x, 1 + y, 1 + z));
 
-        uvs.Add(new Vector2(b.textureX_LR * textureOffset, b.textureY_LR * textureOffset));
-        uvs.Add(new Vector2((b.textureX_LR * textureOffset) + textureOffset, b.textureY_LR * textureOffset));
-        uvs.Add(new Vector2((b.textureX_LR * textureOffset) + textureOffset, (b.textureY_LR * textureOffset) + textureOffset));
-        uvs.Add(new Vector2(b.textureX_LR * textureOffset, (b.textureY_LR * textureOffset) + textureOffset));
+        uvs.Add(new Vector2(b.textureX_LR * textureOffset, b.textureY_LR * textureOffset) + new Vector2(shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX_LR * textureOffset) + textureOffset, b.textureY_LR * textureOffset) + new Vector2(-shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX_LR * textureOffset) + textureOffset, (b.textureY_LR * textureOffset) + textureOffset) + new Vector2(-shrinkSize, -shrinkSize));
+        uvs.Add(new Vector2(b.textureX_LR * textureOffset, (b.textureY_LR * textureOffset) + textureOffset) + new Vector2(shrinkSize, -shrinkSize));
     }
 
 
@@ -214,10 +216,10 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(-1 + x, 1 + y, 0 + z));
         vertices.Add(new Vector3(0 + x, 1 + y, 0 + z));
 
-        uvs.Add(new Vector2(b.textureX_LR * textureOffset, b.textureY_LR * textureOffset));
-        uvs.Add(new Vector2((b.textureX_LR * textureOffset) + textureOffset, b.textureY_LR * textureOffset));
-        uvs.Add(new Vector2((b.textureX_LR * textureOffset) + textureOffset, (b.textureY_LR * textureOffset) + textureOffset));
-        uvs.Add(new Vector2(b.textureX_LR * textureOffset, (b.textureY_LR * textureOffset) + textureOffset));
+        uvs.Add(new Vector2(b.textureX_LR * textureOffset, b.textureY_LR * textureOffset) + new Vector2(shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX_LR * textureOffset) + textureOffset, b.textureY_LR * textureOffset) + new Vector2(-shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX_LR * textureOffset) + textureOffset, (b.textureY_LR * textureOffset) + textureOffset) + new Vector2(-shrinkSize, -shrinkSize));
+        uvs.Add(new Vector2(b.textureX_LR * textureOffset, (b.textureY_LR * textureOffset) + textureOffset) + new Vector2(shrinkSize, -shrinkSize));
     }
 
 
@@ -237,10 +239,10 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(-1 + x, 1 + y, 1 + z));
         vertices.Add(new Vector3(-1 + x, 1 + y, 0 + z));
 
-        uvs.Add(new Vector2(b.textureX_Top * textureOffset, b.textureY_Top * textureOffset));
-        uvs.Add(new Vector2((b.textureX_Top * textureOffset) + textureOffset, b.textureY_Top * textureOffset));
-        uvs.Add(new Vector2((b.textureX_Top * textureOffset) + textureOffset, (b.textureY_Top * textureOffset) + textureOffset));
-        uvs.Add(new Vector2(b.textureX_Top * textureOffset, (b.textureY_Top * textureOffset) + textureOffset));
+        uvs.Add(new Vector2(b.textureX_Top * textureOffset, b.textureY_Top * textureOffset) + new Vector2(shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX_Top * textureOffset) + textureOffset, b.textureY_Top * textureOffset) + new Vector2(-shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX_Top * textureOffset) + textureOffset, (b.textureY_Top * textureOffset) + textureOffset) + new Vector2(-shrinkSize, -shrinkSize));
+        uvs.Add(new Vector2(b.textureX_Top * textureOffset, (b.textureY_Top * textureOffset) + textureOffset) + new Vector2(shrinkSize, -shrinkSize));
     }
 
 
@@ -260,10 +262,10 @@ public class ChunkGenerate : MonoBehaviour
         vertices.Add(new Vector3(-1 + x, 0 + y, 1 + z));
         vertices.Add(new Vector3(-1 + x, 0 + y, 0 + z));
 
-        uvs.Add(new Vector2(b.textureX_Bottom * textureOffset, b.textureY_Bottom * textureOffset));
-        uvs.Add(new Vector2((b.textureX_Bottom * textureOffset) + textureOffset, b.textureY_Bottom * textureOffset));
-        uvs.Add(new Vector2((b.textureX_Bottom * textureOffset) + textureOffset, (b.textureY_Bottom * textureOffset) + textureOffset));
-        uvs.Add(new Vector2(b.textureX_Bottom * textureOffset, (b.textureY_Bottom * textureOffset) + textureOffset));
+        uvs.Add(new Vector2(b.textureX_Bottom * textureOffset, b.textureY_Bottom * textureOffset) + new Vector2(shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX_Bottom * textureOffset) + textureOffset, b.textureY_Bottom * textureOffset) + new Vector2(-shrinkSize, shrinkSize));
+        uvs.Add(new Vector2((b.textureX_Bottom * textureOffset) + textureOffset, (b.textureY_Bottom * textureOffset) + textureOffset) + new Vector2(-shrinkSize, -shrinkSize));
+        uvs.Add(new Vector2(b.textureX_Bottom * textureOffset, (b.textureY_Bottom * textureOffset) + textureOffset) + new Vector2(shrinkSize, -shrinkSize));
     }
 
 
