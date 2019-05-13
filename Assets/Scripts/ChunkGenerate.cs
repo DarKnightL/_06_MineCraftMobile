@@ -28,18 +28,35 @@ public class ChunkGenerate : MonoBehaviour
     [SerializeField]
     float shrinkSize = 0.005f;
 
-    private void Start()
+
+    private static bool isWorking = false;
+    private bool isReady = false;
+
+
+   
+    private void Update()
     {
+        if (isReady==false&&isWorking==false)
+        {
+            isReady = true;
+            StartFunction();
+        }
+    }
 
-        CalculateMap();
 
+    void StartFunction(){
+        isWorking = true;
+        mesh = new Mesh();
+        mesh.name = "Chunk";
+        map = new Block[width, height, width];
+        StartCoroutine(CalculateMap());
 
     }
 
 
-    void CalculateMap()
+    IEnumerator CalculateMap()
     {
-        map = new Block[width, height, width];
+    
 
         for (int x = 0; x < width; x++)
         {
@@ -60,14 +77,13 @@ public class ChunkGenerate : MonoBehaviour
             }
         }
 
-        mesh = new Mesh();
-        mesh.name = "Chunk";
+        yield return null;
 
-        CalculateMesh();
+        StartCoroutine(CalculateMesh());
     }
 
 
-    void CalculateMesh()
+    IEnumerator CalculateMesh()
     {
         for (int x = 0; x < width; x++)
         {
@@ -77,6 +93,10 @@ public class ChunkGenerate : MonoBehaviour
                 {
                     if (map[x, y, z] != null)
                     {
+                        if (y<4)
+                        {
+                            continue;
+                        }
                         if (isBlockTransparant(x + 1, y, z))
                         {
                             AddCubeFront(x, y, z, map[x, y, z]);
@@ -122,6 +142,10 @@ public class ChunkGenerate : MonoBehaviour
 
         GetComponent<MeshFilter>().mesh = mesh;
         this.gameObject.AddComponent<BoxCollider>();
+
+        isWorking = false;
+
+        yield return null;
     }
 
 
