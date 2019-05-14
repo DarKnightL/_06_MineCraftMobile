@@ -18,15 +18,31 @@ public class CameraRotate : MonoBehaviour
     [SerializeField]
     private float yMax = 50f;
 
+    private Quaternion screenMovementSpace;
+    private Vector3 screenMovementForward, screenMovementRight;
+
+    public Transform mainCam;
+
 
     void Start()
     {
-
+        mainCam = GameObject.FindGameObjectWithTag("MainCamera").transform;
     }
 
 
     void Update()
     {
+
+        screenMovementSpace = Quaternion.Euler(0, mainCam.eulerAngles.y, 0);
+        screenMovementForward = screenMovementSpace * Vector3.forward;
+        screenMovementRight = screenMovementSpace * Vector3.right;
+
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+
+        this.transform.position += screenMovementForward * v * speed * Time.deltaTime;
+        this.transform.position += screenMovementRight * h * speed * Time.deltaTime;
+
         if (Input.GetMouseButton(1))
         {
             x += Input.GetAxis("Mouse X") * speedX;
@@ -35,8 +51,8 @@ public class CameraRotate : MonoBehaviour
 
         }
 
-        Quaternion rotationQ = Quaternion.Euler(y, x, 0f);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rotationQ, Time.deltaTime * speed);
+        //Quaternion rotationQ = Quaternion.Euler(y, x, 0f);
+        //transform.rotation = Quaternion.Lerp(transform.rotation, rotationQ, Time.deltaTime * speed);
     }
 
 
