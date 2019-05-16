@@ -51,8 +51,8 @@ public class CameraRotate : MonoBehaviour
 
         }
 
-        //Quaternion rotationQ = Quaternion.Euler(y, x, 0f);
-        //transform.rotation = Quaternion.Lerp(transform.rotation, rotationQ, Time.deltaTime * speed);
+        Quaternion rotationQ = Quaternion.Euler(y, x, 0f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotationQ, Time.deltaTime * speed);
     }
 
 

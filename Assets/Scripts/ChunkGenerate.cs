@@ -60,18 +60,18 @@ public class ChunkGenerate : MonoBehaviour
 
         for (int x = 0; x < width; x++)
         {
-            float noiseX = (float)(x / 20);
+            float noiseX = (float)x / 20;
             for (int y = 0; y < height; y++)
             {
-                float noiseY = (float)(y / 20);
+                float noiseY = (float)y / 20;
                 for (int z = 0; z < width; z++)
                 {
-                    float noiseZ = (float)(z / 20);
+                    float noiseZ = (float)z / 20;
                     float noiseValue = SimplexNoise.Noise.Generate(noiseX, noiseY, noiseZ);
-                    noiseValue /= (float)(y / 5);
-                    if (noiseValue>0.2f)
+                    noiseValue /= (float)y / 5;
+                    if (noiseValue > 0.2f)
                     {
-                        map[x,y,z] = BlockList.GetBlock("dirt");
+                        map[x, y, z] = BlockList.GetBlock("dirt");
                     }
                     //if (y == height - 1 && Random.Range(0, 5) == 1)
                     //{
@@ -82,7 +82,7 @@ public class ChunkGenerate : MonoBehaviour
                     //    map[x, y, z] = BlockList.GetBlock("dirt");
                     //}
                 }
-                
+
             }
         }
 
