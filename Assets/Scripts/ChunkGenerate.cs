@@ -20,7 +20,7 @@ public class ChunkGenerate : MonoBehaviour
     public Block[,,] map;
 
     [SerializeField]
-    int height = 10;
+    public static int height = 10;
     [SerializeField]
     public static int width = 20;
     [SerializeField]

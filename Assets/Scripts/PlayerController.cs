@@ -25,9 +25,9 @@ public class PlayerController : MonoBehaviour
                 int xx = Mathf.FloorToInt(x / ChunkGenerate.width) * ChunkGenerate.width;
                 int zz = Mathf.FloorToInt(z / ChunkGenerate.width) * ChunkGenerate.width;
                 Chunk chunk = Chunk.GetChunk(Mathf.FloorToInt(xx),0, Mathf.FloorToInt(zz));
-                if (chunk==null)
+                if (chunk == null)
                 {
-                    Instantiate(chunkPrefab, new Vector3(xx, 0, zz), Quaternion.identity);
+                    Instantiate(chunkPrefab, new Vector3(Mathf.FloorToInt(xx), 0, Mathf.FloorToInt(zz)), Quaternion.identity);
                 }
             }
         }
