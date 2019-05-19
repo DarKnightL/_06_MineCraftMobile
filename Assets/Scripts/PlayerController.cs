@@ -22,8 +22,8 @@ public class PlayerController : MonoBehaviour
         {
             for (float z = transform.position.z-viewRange; z < transform.position.z+viewRange; z+=ChunkGenerate.width)
             {
-                int xx = Mathf.FloorToInt(x / ChunkGenerate.width) * ChunkGenerate.width;
-                int zz = Mathf.FloorToInt(z / ChunkGenerate.width) * ChunkGenerate.width;
+                int xx = Mathf.FloorToInt((x / ChunkGenerate.width) * ChunkGenerate.width);
+                int zz = Mathf.FloorToInt((z / ChunkGenerate.width) * ChunkGenerate.width);
                 Chunk chunk = Chunk.GetChunk(Mathf.FloorToInt(xx),0, Mathf.FloorToInt(zz));
                 if (chunk == null)
                 {

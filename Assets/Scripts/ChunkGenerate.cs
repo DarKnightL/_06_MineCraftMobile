@@ -56,19 +56,20 @@ public class ChunkGenerate : MonoBehaviour
 
     IEnumerator CalculateMap()
     {
-
+        Vector3 offset = new Vector3(Random.value * 10000, Random.value * 10000, Random.value * 10000);
 
         for (int x = 0; x < width; x++)
         {
-            float noiseX = (float)x / 20;
+            float noiseX = Mathf.Abs((float)(x+transform.position.x + offset.x) / 20);
             for (int y = 0; y < height; y++)
             {
-                float noiseY = (float)y / 20;
+                float noiseY = Mathf.Abs((float)(y+transform.position.y + offset.y) / 20);
                 for (int z = 0; z < width; z++)
                 {
-                    float noiseZ = (float)z / 20;
+                    float noiseZ = Mathf.Abs((float)(z+transform.position.z + offset.z) / 20);
                     float noiseValue = SimplexNoise.Noise.Generate(noiseX, noiseY, noiseZ);
-                    noiseValue /= (float)y / 5;
+                    noiseValue += (8 - (float)(y)) / 5;
+                    noiseValue /= (float)y / 2;
                     if (noiseValue > 0.2f)
                     {
                         map[x, y, z] = BlockList.GetBlock("dirt");
@@ -102,10 +103,11 @@ public class ChunkGenerate : MonoBehaviour
                 {
                     if (map[x, y, z] != null)
                     {
-                        if (y < 4)
-                        {
-                            continue;
-                        }
+                        //if (y < 4)
+                        //{
+                        //    continue;
+                        //}
+
                         if (isBlockTransparant(x + 1, y, z))
                         {
                             AddCubeFront(x, y, z, map[x, y, z]);

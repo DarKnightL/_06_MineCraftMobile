@@ -17,10 +17,11 @@ public class Chunk : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
-    public static Chunk GetChunk(int x ,int y,int z){
+    public static Chunk GetChunk(int x, int y, int z)
+    {
 
         for (int i = 0; i < chunks.Count; i++)
         {
@@ -28,12 +29,15 @@ public class Chunk : MonoBehaviour
             Vector3 chunkPos = chunks[i].transform.position;
             if (chunkPos.Equals(pos))
             {
-                if (pos.x<chunkPos.x||pos.y<chunkPos.y||pos.z<chunkPos.z||pos.x>chunkPos.x+ChunkGenerate.width|| pos.y > chunkPos.y + ChunkGenerate.width|| pos.z > chunkPos.z + ChunkGenerate.width)
-                {
-                    continue;
-                }
                 return chunks[i];
             }
+
+            if (pos.x < chunkPos.x || pos.y < chunkPos.y || pos.z < chunkPos.z || pos.x > chunkPos.x + ChunkGenerate.width || pos.y > chunkPos.y + ChunkGenerate.width || pos.z > chunkPos.z + ChunkGenerate.width)
+            {
+                continue;
+            }
+            return chunks[i];
+
         }
         return null;
     }
