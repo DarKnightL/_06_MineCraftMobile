@@ -69,25 +69,18 @@ public class Chunk : MonoBehaviour
 
     IEnumerator CalculateMap()
     {
-        Random.InitState(seed);
-        Vector3 offset = new Vector3(Random.value * 10000, Random.value * 10000, Random.value * 10000);
 
         for (int x = 0; x < width; x++)
         {
-            float noiseX = Mathf.Abs((float)(x + transform.position.x + offset.x) / 20);
+
             for (int y = 0; y < height; y++)
             {
-                float noiseY = Mathf.Abs((float)(y + transform.position.y + offset.y) / 20);
+
                 for (int z = 0; z < width; z++)
                 {
-                    float noiseZ = Mathf.Abs((float)(z + transform.position.z + offset.z) / 20);
-                    float noiseValue = SimplexNoise.Noise.Generate(noiseX, noiseY, noiseZ);
-                    noiseValue += (8 - (float)y) / 5;
-                    noiseValue /= (float)y / 4;
-                    if (noiseValue >=0.2f)
-                    {
-                        map[x, y, z] = BlockList.GetBlock("dirt");
-                    }
+                    map[x, y, z] = GetTheoreticalBlock(new Vector3(x, y, z) + transform.position);
+
+
                     //if (y == height - 1 && Random.Range(0, 5) == 1)
                     //{
                     //    map[x, y, z] = BlockList.GetBlock("grass");
@@ -321,15 +314,22 @@ public class Chunk : MonoBehaviour
 
     public bool isBlockTransparant(int x, int y, int z)
     {
-        if (x >= width || y >= height || z >= width || x < 0 || y < 0 || z < 0)
+        //if (x >= width || y >= height || z >= width || x < 0 || y < 0 || z < 0)
+        //{
+        //    return true;
+        //}
+        //if (map[x, y, z] == null)
+        //{
+        //    return true;
+        //}
+        if (GetTheoreticalBlock(new Vector3(x, y, z) + transform.position) == null)
         {
             return true;
         }
-        if (map[x, y, z] == null)
+        else
         {
-            return true;
+            return false;
         }
-        return false;
 
     }
 
@@ -356,6 +356,26 @@ public class Chunk : MonoBehaviour
         }
 
         return null;
+    }
+
+
+    public Block GetTheoreticalBlock(Vector3 pos)
+    {
+        Random.InitState(seed);
+        Vector3 offset = new Vector3(Random.value * 10000, Random.value * 10000, Random.value * 10000);
+        float noiseX = Mathf.Abs((float)(pos.x + offset.x) / 20);
+        float noiseY = Mathf.Abs((float)(pos.y + offset.y) / 20);
+        float noiseZ = Mathf.Abs((float)(pos.z + offset.z) / 20);
+
+        float noiseValue = SimplexNoise.Noise.Generate(noiseX, noiseY, noiseZ);
+        noiseValue += (8 - (float)pos.y) / 5;
+        noiseValue /= (float)pos.y / 4f;
+        if (noiseValue >= 0.2f)
+        {
+            return BlockList.GetBlock("dirt");
+        }
+        return null;
+
     }
 
 
