@@ -33,13 +33,13 @@ public class PlayerController : MonoBehaviour
 
 
     void SpawnChunks(int xx,int zz) {
-        for (int y = 0; y < columnHeight; y += Chunk.height) //unlock the limitation of chunk generation in Y axis
+        for (int y = 0; y < columnHeight; y++) //unlock the limitation of chunk generation in Y axis
         {
             int yr = y * Chunk.height-1;
             Chunk chunk = Chunk.GetChunk(Mathf.FloorToInt(xx), Mathf.FloorToInt(yr), Mathf.FloorToInt(zz));
             if (chunk == null)
             {
-                Instantiate(chunkPrefab, new Vector3(xx, Mathf.FloorToInt(yr), zz), Quaternion.identity);
+                Instantiate(chunkPrefab, new Vector3(xx,yr, zz), Quaternion.identity);
             }
         }
     }

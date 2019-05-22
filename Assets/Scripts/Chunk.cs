@@ -78,7 +78,21 @@ public class Chunk : MonoBehaviour
 
                 for (int z = 0; z < width; z++)
                 {
-                    map[x, y, z] = GetTheoreticalBlock(new Vector3(x, y, z) + transform.position);
+                    Block block = GetTheoreticalBlock(new Vector3(x, y, z)+transform.position);
+                    if (block != null)
+                    {
+                        if (GetTheoreticalBlock(new Vector3(x, y+1, z) + transform.position) == null)
+                        {
+                            map[x, y, z] = BlockList.GetBlock("grass");
+                        }
+                        else
+                        {
+                            map[x, y, z] = block;
+                        }
+                        //map[x, y, z] = GetTheoreticalBlock(new Vector3(x, y, z) + transform.position);
+                    }
+
+
 
 
                     //if (y == height - 1 && Random.Range(0, 5) == 1)
@@ -108,6 +122,8 @@ public class Chunk : MonoBehaviour
             {
                 for (int z = 0; z < width; z++)
                 {
+                   
+
                     if (map[x, y, z] != null)
                     {
                         //if (y < 4)
@@ -368,10 +384,10 @@ public class Chunk : MonoBehaviour
         float noiseZ = Mathf.Abs((float)(pos.z + offset.z) / 20);
 
         float noiseValue = SimplexNoise.Noise.Generate(noiseX, noiseY, noiseZ);
-        noiseValue += (8 - (float)pos.y) / 5;
-        noiseValue /= (float)pos.y / 4f;
-        if (noiseValue >= 0.2f)
-        {
+        noiseValue += (20- (float)pos.y) / 18f;
+        noiseValue /=  ((float)pos.y)/19f; 
+        if (noiseValue > 0.2f)
+        {   
             return BlockList.GetBlock("dirt");
         }
         return null;
