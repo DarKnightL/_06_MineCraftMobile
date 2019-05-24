@@ -7,9 +7,11 @@ public class PlayerController : MonoBehaviour
 
     public GameObject chunkPrefab;
     [SerializeField]
-    private int viewRange=30;
+    private int viewRange = 30;
     [SerializeField]
     private int columnHeight = 8;
+    [SerializeField]
+    private LayerMask layerMask;
 
 
     void Start()
@@ -29,18 +31,45 @@ public class PlayerController : MonoBehaviour
                 SpawnChunks(xx, zz);
             }
         }
+
+
+        BlockController();
     }
 
 
-    void SpawnChunks(int xx,int zz) {
+    void SpawnChunks(int xx, int zz)
+    {
         for (int y = 0; y < columnHeight; y++) //unlock the limitation of chunk generation in Y axis
         {
-            int yr = y * Chunk.height-1;
+            int yr = y * Chunk.height - 1;
             Chunk chunk = Chunk.GetChunk(Mathf.FloorToInt(xx), Mathf.FloorToInt(yr), Mathf.FloorToInt(zz));
             if (chunk == null)
             {
-                Instantiate(chunkPrefab, new Vector3(xx,yr, zz), Quaternion.identity);
+                Instantiate(chunkPrefab, new Vector3(xx, yr, zz), Quaternion.identity);
             }
         }
+    }
+
+
+    void BlockController()
+    {
+        RaycastHit hitInfo;
+
+        if (Physics.Raycast(Camera.main.transform.position, transform.forward, out hitInfo, 18f, layerMask))
+        {
+            //Debug.DrawLine(Camera.main.transform.position, hitInfo.transform.position);
+            Vector3 blockPos = new Vector3(Mathf.FloorToInt(hitInfo.point.x), Mathf.FloorToInt(hitInfo.point.y), Mathf.FloorToInt(hitInfo.point.z));
+            if (Input.GetMouseButtonDown(0))
+            {
+                Chunk chunk = Chunk.GetChunk(Mathf.FloorToInt(hitInfo.point.x), Mathf.FloorToInt(hitInfo.point.y), Mathf.FloorToInt(hitInfo.point.z));
+                //Debug.Log(chunk.transform.position);
+                //Debug.Log("Camera"+Camera.main.transform.position);
+            }
+
+
+        }
+
+
+
     }
 }

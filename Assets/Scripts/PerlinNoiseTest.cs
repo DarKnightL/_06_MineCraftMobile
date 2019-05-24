@@ -19,7 +19,7 @@ public class PerlinNoiseTest : MonoBehaviour
             for (int x = 0; x < height; x++)
             {
                 int y = (int)(Mathf.PerlinNoise(x / detailScale, z / detailScale)* heightScale);
-                Debug.Log(y);
+                //Debug.Log(y);
                 Vector3 pos = new Vector3(x, y, z);
                 Instantiate(Block,pos, Quaternion.identity);
             }

@@ -116,6 +116,7 @@ public class Chunk : MonoBehaviour
 
     IEnumerator CalculateMesh()
     {
+       
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -180,6 +181,14 @@ public class Chunk : MonoBehaviour
         isWorking = false;
 
         yield return null;
+    }
+
+
+    public void SetBlock(Vector3 pos, Block block) {
+        Vector3 localPos = pos - transform.position;
+        map[Mathf.FloorToInt(localPos.x), Mathf.FloorToInt(localPos.y), Mathf.FloorToInt(localPos.z)] = block;
+        isWorking = true;
+        StartCoroutine(CalculateMesh());
     }
 
 
@@ -391,8 +400,9 @@ public class Chunk : MonoBehaviour
             return BlockList.GetBlock("dirt");
         }
         return null;
-
     }
+
+
 
 
 }
