@@ -32,6 +32,7 @@ public class Chunk : MonoBehaviour
     float shrinkSize = 0.005f;
 
 
+
     private static bool isWorking = false;
     private bool isReady = false;
 
@@ -116,6 +117,10 @@ public class Chunk : MonoBehaviour
 
     IEnumerator CalculateMesh()
     {
+        mesh = new Mesh();
+        vertices.Clear();
+        triangulars.Clear();
+        uvs.Clear();
        
         for (int x = 0; x < width; x++)
         {
@@ -372,7 +377,7 @@ public class Chunk : MonoBehaviour
                 return chunks[i];
             }
 
-            if (pos.x < chunkPos.x || pos.y < chunkPos.y || pos.z < chunkPos.z || pos.x > chunkPos.x + Chunk.width || pos.y > chunkPos.y + Chunk.width || pos.z > chunkPos.z + Chunk.width)
+            if (pos.x < chunkPos.x || pos.y < chunkPos.y || pos.z < chunkPos.z || pos.x > chunkPos.x + Chunk.width || pos.y > chunkPos.y + Chunk.height || pos.z > chunkPos.z + Chunk.width)
             {
                 continue;
             }

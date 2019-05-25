@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     private int columnHeight = 8;
     [SerializeField]
     private LayerMask layerMask;
+    [SerializeField]
+    private GameObject highLightBlock;
 
 
     void Start()
@@ -57,16 +59,21 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(Camera.main.transform.position, transform.forward, out hitInfo, 18f, layerMask))
         {
-            //Debug.DrawLine(Camera.main.transform.position, hitInfo.transform.position);
-            Vector3 blockPos = new Vector3(Mathf.FloorToInt(hitInfo.point.x), Mathf.FloorToInt(hitInfo.point.y), Mathf.FloorToInt(hitInfo.point.z));
+            Vector3 blockPos = hitInfo.point - hitInfo.normal / 2;  //the normal of the face the ray hit
+            highLightBlock.transform.position = new Vector3(Mathf.Floor(blockPos.x), Mathf.Floor(blockPos.y), Mathf.Floor(blockPos.z));
             if (Input.GetMouseButtonDown(0))
             {
                 Chunk chunk = Chunk.GetChunk(Mathf.FloorToInt(hitInfo.point.x), Mathf.FloorToInt(hitInfo.point.y), Mathf.FloorToInt(hitInfo.point.z));
-                //Debug.Log(chunk.transform.position);
-                //Debug.Log("Camera"+Camera.main.transform.position);
+                chunk.SetBlock(blockPos, null);
             }
-
-
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                Chunk chunk = Chunk.GetChunk(Mathf.FloorToInt(hitInfo.point.x), Mathf.FloorToInt(hitInfo.point.y), Mathf.FloorToInt(hitInfo.point.z));
+                chunk.SetBlock(blockPos, BlockList.GetBlock("dirt"));
+            }
+        }else
+        {
+            highLightBlock.transform.position = new Vector3(-1000, -1000, -1000);
         }
 
 
