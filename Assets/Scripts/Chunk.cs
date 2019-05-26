@@ -14,7 +14,7 @@ public class Chunk : MonoBehaviour
     List<Vector2> uvs = new List<Vector2>();
 
 
-    public static List<Chunk> chunks = new List<Chunk>();
+    public static List<Transform> chunks = new List<Transform>();
 
 
 
@@ -23,9 +23,9 @@ public class Chunk : MonoBehaviour
     public Block[,,] map;
 
     [SerializeField]
-    public static int height = 10;
+    public static int height = 16;
     [SerializeField]
-    public static int width = 20;
+    public static int width = 16;
     [SerializeField]
     float textureOffset = 1 / 16f;
     [SerializeField]
@@ -33,30 +33,46 @@ public class Chunk : MonoBehaviour
 
 
 
-    private static bool isWorking = false;
-    private bool isReady = false;
+    public static bool isWorking = false;
+    public bool isReady = false;
+    private GameObject gamePlayer;
 
     public static int seed;
 
 
     void Start()
     {
-        chunks.Add(this);
+        chunks.Add(this.transform);
     }
 
 
 
     private void Update()
     {
-        if (isReady == false && isWorking == false)
+        if (gamePlayer == null)
         {
-            isReady = true;
-            StartFunction();
+            gamePlayer = GameObject.FindGameObjectWithTag("Player");
         }
+        else
+        {
+            if (Vector3.Distance(this.transform.position, gamePlayer.transform.position) > 100f)
+            {
+                chunks.Remove(this.transform);
+                Destroy(this.gameObject);
+            }
+        }
+
+
+
+        //if (isReady == false && isWorking == false)
+        //{
+        //    isReady = true;
+        //    StartFunction();
+        //}
     }
 
 
-    void StartFunction()
+    public void StartFunction()
     {
 
         isWorking = true;
@@ -68,7 +84,7 @@ public class Chunk : MonoBehaviour
     }
 
 
-    IEnumerator CalculateMap()
+    public IEnumerator CalculateMap()
     {
 
         for (int x = 0; x < width; x++)
@@ -79,10 +95,10 @@ public class Chunk : MonoBehaviour
 
                 for (int z = 0; z < width; z++)
                 {
-                    Block block = GetTheoreticalBlock(new Vector3(x, y, z)+transform.position);
+                    Block block = GetTheoreticalBlock(new Vector3(x, y, z) + transform.position);
                     if (block != null)
                     {
-                        if (GetTheoreticalBlock(new Vector3(x, y+1, z) + transform.position) == null)
+                        if (GetTheoreticalBlock(new Vector3(x, y + 1, z) + transform.position) == null)
                         {
                             map[x, y, z] = BlockList.GetBlock("grass");
                         }
@@ -115,20 +131,20 @@ public class Chunk : MonoBehaviour
     }
 
 
-    IEnumerator CalculateMesh()
+    public IEnumerator CalculateMesh()
     {
         mesh = new Mesh();
         vertices.Clear();
         triangulars.Clear();
         uvs.Clear();
-       
+
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 for (int z = 0; z < width; z++)
                 {
-                   
+
 
                     if (map[x, y, z] != null)
                     {
@@ -183,13 +199,16 @@ public class Chunk : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
         this.gameObject.AddComponent<BoxCollider>();
 
-        isWorking = false;
+       
 
         yield return null;
+        isWorking = false;
+        isReady = true;
     }
 
 
-    public void SetBlock(Vector3 pos, Block block) {
+    public void SetBlock(Vector3 pos, Block block)
+    {
         Vector3 localPos = pos - transform.position;
         map[Mathf.FloorToInt(localPos.x), Mathf.FloorToInt(localPos.y), Mathf.FloorToInt(localPos.z)] = block;
         isWorking = true;
@@ -221,7 +240,6 @@ public class Chunk : MonoBehaviour
 
 
     }
-
 
 
     void AddCubeBack(int x, int y, int z, Block b)
@@ -374,14 +392,14 @@ public class Chunk : MonoBehaviour
             Vector3 chunkPos = chunks[i].transform.position;
             if (chunkPos.Equals(pos))
             {
-                return chunks[i];
+                return chunks[i].GetComponent<Chunk>();
             }
 
             if (pos.x < chunkPos.x || pos.y < chunkPos.y || pos.z < chunkPos.z || pos.x > chunkPos.x + Chunk.width || pos.y > chunkPos.y + Chunk.height || pos.z > chunkPos.z + Chunk.width)
             {
                 continue;
             }
-            return chunks[i];
+            return chunks[i].GetComponent<Chunk>();
 
         }
 
@@ -398,10 +416,10 @@ public class Chunk : MonoBehaviour
         float noiseZ = Mathf.Abs((float)(pos.z + offset.z) / 20);
 
         float noiseValue = SimplexNoise.Noise.Generate(noiseX, noiseY, noiseZ);
-        noiseValue += (20- (float)pos.y) / 18f;
-        noiseValue /=  ((float)pos.y)/19f; 
+        noiseValue += (20 - (float)pos.y) / 18f;
+        noiseValue /= ((float)pos.y) / 19f;
         if (noiseValue > 0.2f)
-        {   
+        {
             return BlockList.GetBlock("dirt");
         }
         return null;
