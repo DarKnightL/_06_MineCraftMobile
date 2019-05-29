@@ -10,6 +10,14 @@ public class Block
     public int textureX, textureY, textureX_Top, textureY_Top, textureX_Bottom, textureY_Bottom;
     public int textureX_LR, textureY_LR;
 
+    public Texture itemView;
+
+
+    public void SetTexture(Texture i)
+    {
+        itemView = i;
+    }
+
 
     public Block()
     {

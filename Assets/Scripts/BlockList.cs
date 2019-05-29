@@ -6,6 +6,8 @@ public class BlockList : MonoBehaviour
 {
 
     public static List<Block> blockList = new List<Block>();
+    public Texture dirtTexture;
+
 
     void Start()
     {
@@ -20,10 +22,14 @@ public class BlockList : MonoBehaviour
 
     private void Awake()
     {
+       
         Block dirt = new Block("dirt", 2, 15, 2, 15, 2, 15);
         Block grass = new Block("grass", 3, 15, 0, 15, 2, 15);
         blockList.Add(dirt);
         blockList.Add(grass);
+
+        dirt.SetTexture(dirtTexture);
+      
     }
 
 
@@ -38,4 +44,8 @@ public class BlockList : MonoBehaviour
         }
         return null;
     }
+
+
+  
+
 }
