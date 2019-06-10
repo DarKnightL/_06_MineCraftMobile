@@ -171,32 +171,32 @@ public class Chunk : MonoBehaviour
                         //    continue;
                         //}
 
-                        if (isBlockTransparant(x + 1, y, z))
+                        if (PrimeBlockTransparant(x + 1, y, z))
                         {
                             AddCubeFront(x, y, z, map[x, y, z]);
                         }
 
-                        if (isBlockTransparant(x - 1, y, z))
+                        if (PrimeBlockTransparant(x - 1, y, z))
                         {
                             AddCubeBack(x, y, z, map[x, y, z]);
                         }
 
-                        if (isBlockTransparant(x, y, z + 1))
+                        if (PrimeBlockTransparant(x, y, z + 1))
                         {
                             AddCubeRight(x, y, z, map[x, y, z]);
                         }
 
-                        if (isBlockTransparant(x, y, z - 1))
+                        if (PrimeBlockTransparant(x, y, z - 1))
                         {
                             AddCubeLeft(x, y, z, map[x, y, z]);
                         }
 
-                        if (isBlockTransparant(x, y + 1, z))
+                        if (PrimeBlockTransparant(x, y + 1, z))
                         {
                             AddCubeTop(x, y, z, map[x, y, z]);
                         }
 
-                        if (isBlockTransparant(x, y - 1, z))
+                        if (PrimeBlockTransparant(x, y - 1, z))
                         {
 
                             AddCubeBottom(x, y, z, map[x, y, z]);
@@ -221,7 +221,7 @@ public class Chunk : MonoBehaviour
 
         yield return null;
         isWorking = false;
-       
+
         blockWorking = false;
         yield return null;
     }
@@ -232,14 +232,78 @@ public class Chunk : MonoBehaviour
     public void SetBlock(Vector3 worldPos, Block block)
     {
         Vector3 localPos = worldPos - transform.position;
-        if (localPos.x>worldPos.x)
+        if (localPos.x > worldPos.x)
         {
             return;
         }
-        map[Mathf.FloorToInt(localPos.x), Mathf.FloorToInt(localPos.y), Mathf.FloorToInt(localPos.z)] = block;
-        isWorking = true;
+        if (Mathf.FloorToInt(localPos.x) >= width || Mathf.FloorToInt(localPos.y) >= height || Mathf.FloorToInt(localPos.z) >= width || Mathf.FloorToInt(localPos.x) < 0 || Mathf.FloorToInt(localPos.y) < 0 || Mathf.FloorToInt(localPos.z) < 0)
+        {
+
+        }
+        else
+        {
+            map[Mathf.FloorToInt(localPos.x), Mathf.FloorToInt(localPos.y), Mathf.FloorToInt(localPos.z)] = block;
+        }
+        //isWorking = true;
         StartCoroutine(ReCalculateMesh());
+
+        if (block != null)
+        {
+            return;
+        }
+
+
+        if (Mathf.FloorToInt(localPos.x) >= width - 1)
+        {
+            if (right == null)
+            {
+                right = GetChunk(Mathf.FloorToInt(localPos.x + 1), Mathf.FloorToInt(localPos.y), Mathf.FloorToInt(localPos.z));
+            }
+            StartCoroutine(right.ReCalculateMesh());
+        }
+        if (Mathf.FloorToInt(localPos.x) <= 1)
+        {
+            if (left == null)
+            {
+                left = GetChunk(Mathf.FloorToInt(localPos.x - 1), Mathf.FloorToInt(localPos.y), Mathf.FloorToInt(localPos.z));
+            }
+            StartCoroutine(left.ReCalculateMesh());
+        }
+        if (Mathf.FloorToInt(localPos.z) >= width - 1)
+        {
+            if (front == null)
+            {
+                front = GetChunk(Mathf.FloorToInt(localPos.x), Mathf.FloorToInt(localPos.y), Mathf.FloorToInt(localPos.z + 1));
+            }
+            StartCoroutine(front.ReCalculateMesh());
+        }
+        if (Mathf.FloorToInt(localPos.z) <= 1)
+        {
+            if (back == null)
+            {
+                back = GetChunk(Mathf.FloorToInt(localPos.x), Mathf.FloorToInt(localPos.y), Mathf.FloorToInt(localPos.z - 1));
+            }
+            StartCoroutine(back.ReCalculateMesh());
+        }
+        if (Mathf.FloorToInt(localPos.y) >= height - 1)
+        {
+            if (top == null)
+            {
+                top = GetChunk(Mathf.FloorToInt(localPos.x), Mathf.FloorToInt(localPos.y + 1), Mathf.FloorToInt(localPos.z));
+            }
+            StartCoroutine(top.ReCalculateMesh());
+        }
+        if (Mathf.FloorToInt(localPos.y) <= 1)
+        {
+            if (bottom == null)
+            {
+                bottom = GetChunk(Mathf.FloorToInt(localPos.x), Mathf.FloorToInt(localPos.y - 1), Mathf.FloorToInt(localPos.z));
+            }
+            StartCoroutine(bottom.ReCalculateMesh());
+        }
     }
+
+
 
 
     void AddCubeFront(int x, int y, int z, Block b)
@@ -386,25 +450,52 @@ public class Chunk : MonoBehaviour
 
 
 
-    public bool isBlockTransparant(int x, int y, int z)
+    public bool PrimeBlockTransparant(int x, int y, int z)
     {
-        //if (x >= width || y >= height || z >= width || x < 0 || y < 0 || z < 0)
-        //{
-        //    return true;
-        //}
-        //if (map[x, y, z] == null)
-        //{
-        //    return true;
-        //}
-        if (GetTheoreticalBlock(new Vector3(x, y, z) + transform.position) == null)
+        if (x >= width || y >= height || z >= width || x < 0 || y < 0 || z < 0)
+        {
+            if (GetTheoreticalBlock(new Vector3(x, y, z) + transform.position) == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        if (map[x, y, z] == null)
         {
             return true;
         }
-        else
+
+        return false;
+    }
+
+
+
+
+
+    public bool isBlockTransparant(int x, int y, int z)
+    {
+        if (x >= width || y >= height || z >= width || x < 0 || y < 0 || z < 0)
         {
-            return false;
+            if (GetTheoreticalBlock(new Vector3(x, y, z) + transform.position) == null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
+        if (map[x, y, z] == null)
+        {
+            return true;
+        }
+
+        return false;
     }
 
 
