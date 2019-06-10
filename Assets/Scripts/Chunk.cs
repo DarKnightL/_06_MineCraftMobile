@@ -20,6 +20,15 @@ public class Chunk : MonoBehaviour
 
     Mesh mesh;
 
+
+    Chunk bottom;
+    Chunk top;
+    Chunk left;
+    Chunk right;
+    Chunk front;
+    Chunk back;
+
+
     public Block[,,] map;
 
     [SerializeField]
@@ -34,6 +43,9 @@ public class Chunk : MonoBehaviour
 
 
     public static bool isWorking = false;
+    public static bool blockWorking = false;
+
+
     public bool isReady = false;
     private GameObject gamePlayer;
 
@@ -127,12 +139,18 @@ public class Chunk : MonoBehaviour
 
         yield return null;
 
-        StartCoroutine(CalculateMesh());
+        StartCoroutine(ReCalculateMesh());
     }
 
 
-    public IEnumerator CalculateMesh()
+
+
+
+
+    public IEnumerator ReCalculateMesh()
     {
+        isReady = true;
+        blockWorking = true;
         mesh = new Mesh();
         vertices.Clear();
         triangulars.Clear();
@@ -199,20 +217,28 @@ public class Chunk : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
         this.gameObject.AddComponent<BoxCollider>();
 
-       
+
 
         yield return null;
         isWorking = false;
-        isReady = true;
+       
+        blockWorking = false;
+        yield return null;
     }
 
 
-    public void SetBlock(Vector3 pos, Block block)
+
+
+    public void SetBlock(Vector3 worldPos, Block block)
     {
-        Vector3 localPos = pos - transform.position;
+        Vector3 localPos = worldPos - transform.position;
+        if (localPos.x>worldPos.x)
+        {
+            return;
+        }
         map[Mathf.FloorToInt(localPos.x), Mathf.FloorToInt(localPos.y), Mathf.FloorToInt(localPos.z)] = block;
         isWorking = true;
-        StartCoroutine(CalculateMesh());
+        StartCoroutine(ReCalculateMesh());
     }
 
 
